@@ -1,6 +1,6 @@
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config(); // Ensure this is at the top of the file
 
-const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client } = require('@aws-sdk/client-s3');
 const multer = require('multer');
 const multerS3 = require('multer-s3');
 
@@ -12,19 +12,18 @@ const s3 = new S3Client({
     },
 });
 
+// Debugging bucket name
+console.log("Bucket Name:", process.env.AWS_S3_BUCKET_NAME);
+
 const upload = multer({
     storage: multerS3({
         s3,
-        bucket: process.env.AWS_S3_BUCKET_NAME,
-
-        // acl: 'public-read', // Allow public read access to uploaded files
-
+        bucket: process.env.AWS_S3_BUCKET_NAME, // Ensure this environment variable is correct
         key: (req, file, cb) => {
             const filename = `${Date.now()}_${file.originalname}`;
             cb(null, filename);
         },
     }),
-    
 });
 
 module.exports = upload;
