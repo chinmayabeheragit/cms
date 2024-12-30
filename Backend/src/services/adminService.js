@@ -36,7 +36,6 @@ const login = async (body) => {
   }
 };
 
-
 const registerAdmin = async ({name, email, password}) => {
   try {
     const existingUser = await adminQuery.findByEmail(email);
@@ -56,7 +55,35 @@ const registerAdmin = async ({name, email, password}) => {
   }
 }
 
+const createCandidate = async ({ name, email, password, mobileNumber, address, adminEmail }, session) => {
+  try {
+    const candidateData = {
+      name,
+      email,
+      password,
+      mobileNumber,
+      address,
+      role: "candidate", // Explicitly set role
+      createdBy: adminEmail, // Track admin who created this candidate
+    };
+    const result = await adminQuery.createCandiadate(candidateData, session);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getCandidates = async (adminEmail) => {
+  try {
+    return await adminQuery.getCandidates(adminEmail);
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
    login,
-   registerAdmin
+   registerAdmin,
+   createCandidate,
+   getCandidates
  };

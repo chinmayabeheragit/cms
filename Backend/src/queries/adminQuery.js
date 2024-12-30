@@ -1,4 +1,5 @@
 const {Admin} = require("../models/Admin");
+const {candidate} = require('../models/Candidate')
 
 const findByEmail = async (email) => {
   try {
@@ -14,7 +15,29 @@ const createAdmin = async (body) => {
   return await newAdmin.save();
 }
 
+const createCandiadate = async (candidateData, session) => {
+  try {
+    const result = new candidate(candidateData)
+    await result.save({session});
+    return result;
+  } catch (error){
+    throw error
+  }
+}
+
+const getCandidates = async (adminEmail) => {
+  try {
+    return await candidate.find({ createdBy: adminEmail }).exec();
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+
 module.exports = { 
   findByEmail,
-  createAdmin
+  createAdmin,
+  createCandiadate,
+  getCandidates
 };

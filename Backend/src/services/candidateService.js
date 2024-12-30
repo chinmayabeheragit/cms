@@ -17,7 +17,7 @@ const login = async (body) => {
     }
 
     const role = user.role;
-    const token = generateAuthToken(email, role);
+    const token = generateAuthToken.generateAuthToken(email, role);
 
     return { role, token };
   } catch (error) {
@@ -25,4 +25,33 @@ const login = async (body) => {
   }
 };
 
-module.exports = { login };
+const getCandidateDetails = async (candidateEmail) => {
+  try {
+    return await candidateQuery.getCandidateDetails(candidateEmail);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+const uploadFilesService = async (candidateEmail, profilePicture, resume) => {
+  const updates = {};
+
+  if (profilePicture) {
+    updates.profilePicture = profilePicture.location; // S3 URL
+  }
+
+  if (resume) {
+    updates.resume = resume.location; // S3 URL
+  }
+
+  const updatedCandidate = await candidateQuery.updateCandidateFilesQuery(candidateEmail, updates);
+
+  return updatedCandidate;
+};
+
+
+module.exports = { login,
+  getCandidateDetails,
+  uploadFilesService
+ };
