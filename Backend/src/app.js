@@ -12,7 +12,7 @@ const adminRoutes = require('./routers/adminRoutes');
 const candidateRoutes = require('./routers/candidateRoutes');
 
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT
 
 // Middleware
 app.use(cors({ origin: '*' }));
