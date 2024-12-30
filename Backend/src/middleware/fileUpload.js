@@ -18,7 +18,7 @@ console.log("Bucket Name:", process.env.AWS_S3_BUCKET_NAME);
 const upload = multer({
     storage: multerS3({
         s3,
-        bucket: process.env.AWS_S3_BUCKET_NAME, // Ensure this environment variable is correct
+        bucket: 'cmsbucket', // Ensure this environment variable is correct
         key: (req, file, cb) => {
             const filename = `${Date.now()}_${file.originalname}`;
             cb(null, filename);
