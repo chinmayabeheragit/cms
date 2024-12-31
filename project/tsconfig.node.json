@@ -13,6 +13,8 @@
     "noEmit": true,
 
     /* Linting */
+    "allowJs": true, // Add this line
+
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
