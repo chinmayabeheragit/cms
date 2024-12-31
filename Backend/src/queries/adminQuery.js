@@ -34,10 +34,28 @@ const getCandidates = async (adminEmail) => {
 };
 
 
+const deleteCandidateById = async (candidateId, session) => {
+  try {
+    const result = await candidate.findByIdAndDelete(candidateId, { session });
+    if (!result) {
+      throw {
+        errorCode: 404,
+        message: "Candidate Not Found",
+        displayMessage: "The candidate you are trying to delete does not exist.",
+      };
+    }
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
+
 
 module.exports = { 
   findByEmail,
   createAdmin,
   createCandiadate,
-  getCandidates
+  getCandidates,
+  deleteCandidateById
 };

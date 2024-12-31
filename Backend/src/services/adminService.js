@@ -81,9 +81,20 @@ const getCandidates = async (adminEmail) => {
   }
 };
 
+
+const deleteCandidate = async (candidateId, session) => {
+  try {
+    const result = await adminQuery.deleteCandidateById(candidateId, session);
+    return result;
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
    login,
    registerAdmin,
    createCandidate,
-   getCandidates
+   getCandidates,
+   deleteCandidate
  };

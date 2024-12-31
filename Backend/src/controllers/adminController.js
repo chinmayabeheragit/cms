@@ -82,7 +82,7 @@ const createCandidate = async (req, res) => {
     session.startTransaction();
 
     const { name, email, password, mobileNumber, address } = req.body;
-    const adminEmail = req.userName; // Get admin email from JWT token
+    const adminEmail = req.userName;
 
     const result = await adminService.createCandidate(
       { name, email, password, mobileNumber, address, adminEmail },
@@ -143,10 +143,60 @@ const getCandidates = async (req, res) => {
 };
 
 
+const deleteCandidate = async (req, res) => {
+  let session;
+  try {
+    // Ensure only admin can delete candidates
+    if (req.role !== "admin") {
+      return response.handleErrorResponse(
+        { errorCode: 403, message: "Forbidden", displayMessage: "Access denied" },
+        res
+      );
+    }
+
+    session = await mongoose.startSession();
+    session.startTransaction();
+
+    const candidateId = req.params.id;
+
+    const result = await adminService.deleteCandidate(candidateId, session);
+
+    await session.commitTransaction();
+
+    return response.handleSuccessResponse(
+      {
+        successCode: 200,
+        result,
+      },
+      res,
+      "Candidate deleted successfully."
+    );
+  } catch (error) {
+    console.error(error);
+    if (session) {
+      await session.abortTransaction();
+    }
+    if (error.errorCode && error.message && error.displayMessage) {
+      return response.handleErrorResponse(error, res);
+    } else {
+      return response.handleErrorResponse(
+        { errorCode: 500, message: "Internal Server Error", displayMessage: "An error occurred while deleting the candidate." },
+        res
+      );
+    }
+  } finally {
+    if (session) {
+      session.endSession();
+    }
+  }
+};
+
+
 
 module.exports = {
   Adminlogin,
   registerAdmin,
   createCandidate,
-  getCandidates
+  getCandidates,
+  deleteCandidate
 }

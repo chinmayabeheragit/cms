@@ -9,6 +9,6 @@ router.post("/register",controller.registerAdmin);
 
 router.post("/createCandidate", auth, controller.createCandidate);
 router.get("/admin/candidates", auth, controller.getCandidates);
-// router.delete("/admin/candidate/:id", auth.verifyAdmin, controller.deleteCandidate);
+router.delete("/deleteCandidate/:id", auth, controller.deleteCandidate);
 
 module.exports = router;
